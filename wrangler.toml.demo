@@ -18,7 +18,7 @@ compatibility_flags = ["nodejs_compat"]
 # - https://developers.cloudflare.com/workers/configuration/secrets/
 [vars]
 # MY_VARIABLE = "production_value"
-RESEND_API_KEY = "re_CFtkaAeE_MszAKw9dWTqRB3ch3TwE4txU"
+RESEND_API_KEY = "re_1234"
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai

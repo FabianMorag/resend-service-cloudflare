@@ -1,15 +1,40 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+import { Resend } from 'resend'
 
-export default {
-	async fetch(request, env, ctx) {
-		return new Response('Hello World!');
-	},
-};
+const app = new Hono()
+
+app.use('/', cors({ origin: '*' }))
+
+app.post('/', async (c) => {
+  const resend = new Resend(c.env.RESEND_API_KEY)
+  const { name, email, message } = await c.req.json()
+
+  const { error } = await resend.emails.send({
+    from: `${name} <contacto@fabianmorag.com>`,
+    to: ['contacto@fabianmorag.com'],
+    subject: 'Contacto desde fabianmorag.com',
+    html:
+      `
+      <ul>
+        <li>
+          <strong>Nombre</strong>: ${name}
+        </li>
+        <li>
+          <strong>Email</strong>: ${email}
+        </li>
+        <li>
+          <strong>Mensaje</strong>: ${message}
+        </li>
+      </ul>
+      `
+  })
+
+  if (error) {
+    return c.error('Error sending email', { status: 500 })
+  }
+
+  return c.text('OK', { status: 200 })
+})
+
+export default app
