@@ -4,7 +4,7 @@ import { Resend } from 'resend'
 
 const app = new Hono()
 
-app.use('/', cors({ origin: '*' }))
+app.use('/', cors({ origin: ['https://www.fabianmorag.com', 'https://fabianmorag.com'] }))
 
 app.post('/', async (c) => {
   const resend = new Resend(c.env.RESEND_API_KEY)
